@@ -3,6 +3,9 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+#add config.properties
+config.properties
+
 # C extensions
 *.so
 

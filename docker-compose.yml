@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://019cf031-3e22-7be9-8fc8-fccc566cb46d:af38a147-dea4-4ddd-a3e3-fb08d55e4af7@us-west-2.db.thenile.dev/eventbooking
+      - SECRET_KEY=e975f23a4175314781749581048d0a84d43685f0db272421946346766465373a
