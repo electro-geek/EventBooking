@@ -8,8 +8,14 @@ from contextlib import asynccontextmanager
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Create tables if they don't exist (Runs on startup)
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        print("Database tables initialized successfully")
+    except Exception as e:
+        print(f"Error during database initialization: {e}")
+        # We don't raise the error here so the app can still start 
+        # and provide a 500 error on the actual API call instead of a crash.
     yield
     # Shutdown logic (if any) here
 
