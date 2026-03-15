@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventElite | Premium Booking Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-fill-color: transparent;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a,
+        .nav-links button {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links button:hover {
+            color: var(--text);
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white !important;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            text-transform: uppercase;
+            font-size: 0.85rem !important;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Hero / Hero Sections */
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(to bottom, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-fill-color: transparent;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Cards and Grids */
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+        }
+
+        .badge {
+            background: var(--glass);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .slots-low {
+            color: #fb7185;
+            font-weight: 600;
+        }
+
+        /* Forms */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--bg);
+            border: 1px solid var(--glass-border);
+            width: 90%;
+            max-width: 450px;
+            padding: 2.5rem;
+            border-radius: 32px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            color: #fff;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .auth-toggle span {
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Success/Error Toasts */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            background: #1e293b;
+            color: #fff;
+            border: 1px solid var(--glass-border);
+            transform: translateY(150%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2000;
+        }
+
+        #toast.show {
+            transform: translateY(0);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .booking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass);
+            padding: 1rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .status-confirmed {
+            color: #4ade80;
+        }
+
+        .status-cancelled {
+            color: #fb7185;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Dashboard Header -->
+        <nav>
+            <div class="logo">EventElite</div>
+            <div class="nav-links">
+                <a href="#" onclick="showTab('events')">Browse</a>
+                <a href="#" id="myBookingsBtn" class="hidden" onclick="showTab('bookings')">My Tickets</a>
+                <button id="addEventBtn" class="hidden" onclick="showModal('eventModal')">Post Event</button>
+                <button id="loginBtn" class="btn-primary" onclick="showModal('authModal')">Join Now</button>
+                <div id="userProfile" class="hidden" style="display:flex; align-items:center; gap: 1rem;">
+                    <span id="userName" style="font-weight:600; font-size: 0.9rem;"></span>
+                    <button onclick="logout()" style="color: #fb7185; font-size: 0.8rem;">Sign Out</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div id="eventsTab" class="tab-content active">
+            <h1 class="section-title">Discover Elite Events</h1>
+            <div id="eventList" class="event-grid">
+                <!-- Event cards injected here -->
+                <div style="text-align: center; grid-column: 1/-1; padding: 3rem;">
+                    <p style="color: var(--text-dim);">Fetching upcoming experiences...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="bookingsTab" class="tab-content">
+            <h1 class="section-title">Your Reserved Seats</h1>
+            <div id="bookingList" style="max-width: 700px; margin: 0 auto;">
+                <!-- Bookings injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <h2 id="authTitle" style="margin-bottom: 2rem; font-weight: 800;">Welcome Back</h2>
+            <form id="authForm">
+                <div class="form-group" id="nameGroup" style="display:none;">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" required placeholder="name@example.com">
+                </div>
+                <div class="form-group" id="roleGroup" style="display:none;">
+                    <label>Join as</label>
+                    <select id="role">
+                        <option value="customer">Attending (Customer)</option>
+                        <option value="organizer">Organizing (Host)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required placeholder="••••••••">
+                </div>
+                <button type="submit" id="authSubmit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Sign
+                    In</button>
+            </form>
+            <p class="auth-toggle" id="authToggle">New here? <span onclick="toggleAuthMode()">Create account</span></p>
+            <button onclick="hideModal('authModal')"
+                style="position:absolute; top: 1.5rem; right: 1.5rem; background:none; border:none; color:var(--text-dim); cursor:pointer;">✕</button>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 2rem; font-weight: 800;">Create Experience</h2>
+            <form id="eventForm">
+                <div class="form-group">
+                    <label>Event Name</label>
+                    <input type="text" id="eventTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="eventDesc" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" id="eventLoc" required>
+                </div>
+                <div class="form-row" style="display:flex; gap: 1rem;">
+                    <div class="form-group" style="flex:1">
+                        <label>Start Time</label>
+                        <input type="datetime-local" id="eventStart" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Total Capacity</label>
+                    <input type="number" id="eventSlots" required min="1">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Launch Event</button>
+            </form>
+            <button onclick="hideModal('eventModal')"
+                style="position:absolute; top: 1.5rem; right: 1.5rem; background:none; border:none; color:var(--text-dim); cursor:pointer;">✕</button>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+        const API_BASE = 'https://event-booking-three.vercel.app/api/v1';
+        let isLogin = true;
+        let currentUser = null;
+        let token = localStorage.getItem('token');
+
+        // Initial Load
+        window.onload = () => {
+            fetchEvents();
+            if (token) {
+                // For simplicity, we just check if token exists. 
+                // In real app, we would verify with backend.
+                currentUser = JSON.parse(localStorage.getItem('user'));
+                updateUI();
+            }
+        };
+
+        // --- UI Logic ---
+        function showModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function hideModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+            if (tab === 'bookings') fetchBookings();
+        }
+
+        function toggleAuthMode() {
+            isLogin = !isLogin;
+            document.getElementById('authTitle').innerText = isLogin ? 'Welcome Back' : 'Join the Elite';
+            document.getElementById('authSubmit').innerText = isLogin ? 'Sign In' : 'Create Account';
+            document.getElementById('authToggle').innerHTML = isLogin ? 'New here? <span onclick="toggleAuthMode()">Create account</span>' : 'Have an account? <span onclick="toggleAuthMode()">Sign in</span>';
+            document.getElementById('nameGroup').style.display = isLogin ? 'none' : 'block';
+            document.getElementById('roleGroup').style.display = isLogin ? 'none' : 'block';
+        }
+
+        function notify(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function updateUI() {
+            if (currentUser) {
+                document.getElementById('loginBtn').classList.add('hidden');
+                document.getElementById('userProfile').classList.remove('hidden');
+                document.getElementById('userName').innerText = currentUser.full_name;
+                document.getElementById('myBookingsBtn').classList.remove('hidden');
+
+                if (currentUser.role === 'organizer') {
+                    document.getElementById('addEventBtn').classList.remove('hidden');
+                }
+            } else {
+                document.getElementById('loginBtn').classList.remove('hidden');
+                document.getElementById('userProfile').classList.add('hidden');
+                document.getElementById('addEventBtn').classList.add('hidden');
+                document.getElementById('myBookingsBtn').classList.add('hidden');
+            }
+        }
+
+        // --- Data Fetching ---
+        async function fetchEvents() {
+            try {
+                const res = await fetch(`${API_BASE}/events/`);
+                const data = await res.json();
+                const list = document.getElementById('eventList');
+                list.innerHTML = data.map(event => `
+                    <div class="card">
+                        <h3>${event.title}</h3>
+                        <p>${event.description || 'No description provided.'}</p>
+                        <div class="card-meta">
+                            <span>📍 ${event.location}</span>
+                            <span>📅 ${new Date(event.start_time).toLocaleDateString()}</span>
+                        </div>
+                        <div class="card-meta">
+                            <span class="badge ${event.available_slots < 10 ? 'slots-low' : ''}">
+                                ${event.available_slots} / ${event.total_slots} seats
+                            </span>
+                        </div>
+                        <button class="btn-primary" onclick="bookTicket(${event.id})" style="width: 100%">
+                            Reserve My Spot
+                        </button>
+                    </div>
+                `).join('');
+            } catch (err) {
+                notify('Failed to load events');
+            }
+        }
+
+        async function fetchBookings() {
+            if (!token) return;
+            try {
+                const res = await fetch(`${API_BASE}/bookings/my-bookings`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                const list = document.getElementById('bookingList');
+                if (data.length === 0) {
+                    list.innerHTML = '<p style="text-align:center; color: var(--text-dim);">No bookings yet. Go grab some tickets!</p>';
+                    return;
+                }
+                list.innerHTML = data.map(b => `
+                    <div class="booking-item">
+                        <div>
+                            <div style="font-weight:600; font-size: 1.1rem; margin-bottom: 0.3rem;">Event #${b.event_id}</div>
+                            <div style="color: var(--text-dim); font-size: 0.8rem;">Booked on: ${new Date(b.booking_time).toLocaleDateString()}</div>
+                        </div>
+                        <div class="status-${b.status.toLowerCase()}" style="font-weight:800; text-transform:uppercase; font-size: 0.75rem; letter-spacing: 1px;">
+                            ${b.status}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                notify('Failed to load bookings');
+            }
+        }
+
+        // --- Actions ---
+        document.getElementById('authForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('authSubmit');
+            btn.innerText = 'Processing...';
+
+            const url = isLogin ? `${API_BASE}/auth/login` : `${API_BASE}/auth/register`;
+            const payload = isLogin
+                ? `username=${escape(document.getElementById('email').value)}&password=${escape(document.getElementById('password').value)}`
+                : JSON.stringify({
+                    email: document.getElementById('email').value,
+                    full_name: document.getElementById('fullName').value,
+                    password: document.getElementById('password').value,
+                    role: document.getElementById('role').value
+                });
+
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: isLogin
+                        ? { 'Content-Type': 'application/x-www-form-urlencoded' }
+                        : { 'Content-Type': 'application/json' },
+                    body: payload
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || 'Auth failed');
+
+                if (isLogin) {
+                    token = data.access_token;
+                    localStorage.setItem('token', token);
+
+                    // Decode JWT (hacky for demo) to get user info if possible 
+                    // or just reload UI. Since we don't have a /me endpoint yet,
+                    // let's assume successful login and update UI.
+                    // For a proper app, we'd fetch the user profile here.
+                    currentUser = { full_name: 'Authorized User', role: 'customer' };
+                    // We can actually try to parse the base64 part of JWT for the role
+                    try {
+                        const payloadBase64 = token.split('.')[1];
+                        const decodedPayload = JSON.parse(atob(payloadBase64));
+                        currentUser.role = decodedPayload.role;
+                        currentUser.full_name = decodedPayload.sub.split('@')[0]; // fallback
+                    } catch (e) { }
+
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                    hideModal('authModal');
+                    updateUI();
+                    notify('Welcome back!');
+                } else {
+                    notify('Account created! Please sign in.');
+                    toggleAuthMode();
+                }
+            } catch (err) {
+                notify(err.message);
+            } finally {
+                btn.innerText = isLogin ? 'Sign In' : 'Create Account';
+            }
+        };
+
+        async function bookTicket(eventId) {
+            if (!token) {
+                showModal('authModal');
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/bookings/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ event_id: eventId, ticket_quantity: 1 })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.detail || 'Booking failed');
+
+                notify(data.status === 'confirmed' ? 'Successfully Booked!' : 'Added to Waitlist!');
+                fetchEvents();
+            } catch (err) {
+                notify(err.message);
+            }
+        }
+
+        document.getElementById('eventForm').onsubmit = async (e) => {
+            e.preventDefault();
+            try {
+                const res = await fetch(`${API_BASE}/events/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        title: document.getElementById('eventTitle').value,
+                        description: document.getElementById('eventDesc').value,
+                        location: document.getElementById('eventLoc').value,
+                        start_time: document.getElementById('eventStart').value,
+                        end_time: document.getElementById('eventStart').value, // short demo event
+                        total_slots: parseInt(document.getElementById('eventSlots').value)
+                    })
+                });
+                if (!res.ok) throw new Error('Failed to create event');
+                hideModal('eventModal');
+                notify('Event launched successfully!');
+                fetchEvents();
+            } catch (err) {
+                notify(err.message);
+            }
+        };
+
+        function logout() {
+            localStorage.clear();
+            token = null;
+            currentUser = null;
+            updateUI();
+            notify('Signed out successfully');
+            showTab('events');
+        }
+    </script>
+</body>
+
+</html>

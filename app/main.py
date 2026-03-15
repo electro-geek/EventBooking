@@ -19,11 +19,22 @@ async def lifespan(app: FastAPI):
     yield
     # Shutdown logic (if any) here
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(
     title="Event Booking System",
     description="Backend for managing events and ticket bookings",
     version="1.0.0",
     lifespan=lifespan
+)
+
+# Enable CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # In production, you might want to specify your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Root endpoint

@@ -91,4 +91,19 @@ $$\text{available\_slots} = \text{available\_slots} - \text{requested\_tickets}$
 
 ---
 
-**Would you like me to generate the initial `SQLAlchemy` models or the `Pydantic` schemas for this project to help Antigravity get started?**
+---
+
+## 6. Frontend Dashboard (Elite UI)
+
+A stunning, glassmorphism-based frontend has been created for easy testing and showcasing:
+- **Location:** `frontend/index.html`
+- **Setup:** Simply open the file in your browser.
+- **Features:** 
+  - Dynamic Event Feed
+  - Role-based Dashboard (Organizer/Customer)
+  - Real-time Booking Logic
+  - Integrated Notifications
+
+---
+
+**Project built and deployed by Antigravity.**
